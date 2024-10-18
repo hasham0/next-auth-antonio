@@ -11,7 +11,6 @@ const fontPoppins = Poppins({
 });
 
 const Header: FC<Props> = ({ label }) => {
-  console.log(label);
   return (
     <div className="flex w-full flex-col items-center justify-center gap-y-4">
       <h1
