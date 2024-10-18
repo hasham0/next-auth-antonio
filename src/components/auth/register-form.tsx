@@ -18,10 +18,12 @@ import FormError from "@/components/customComp/form-error";
 import FormSuccess from "@/components/customComp/form-success";
 import { RegisterAction } from "@/actions/register";
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 const RegisterForm: FC<Props> = ({}) => {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<string | undefined>(undefined);
@@ -44,6 +46,9 @@ const RegisterForm: FC<Props> = ({}) => {
           throw new Error(registerData.error);
         }
         setSuccess(registerData.success as string);
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
       } catch (error) {
         const err = (error as { message: string }).message;
         setError(err as string);

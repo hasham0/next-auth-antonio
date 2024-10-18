@@ -48,7 +48,10 @@ export default {
         return null;
       },
     }),
-    GitHub,
+    GitHub({
+      clientId: process.env.AUTH_GITHUB_ID as string,
+      clientSecret: process.env.AUTH_GITHUB_SECRET as string,
+    }),
     Google,
   ],
 } satisfies NextAuthConfig;
