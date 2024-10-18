@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RegisterSchema, RegisterSchemaTS } from "@/db/schemas";
+import { RegisterSchema, RegisterSchemaTS } from "@/database/schemas";
 import FormError from "@/components/customComp/form-error";
 import FormSuccess from "@/components/customComp/form-success";
 import { RegisterAction } from "@/actions/register";
