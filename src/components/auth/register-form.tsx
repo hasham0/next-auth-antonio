@@ -37,7 +37,6 @@ const RegisterForm: FC<Props> = ({}) => {
   const handleRegisterSubmit: SubmitHandler<RegisterSchemaTS> = (data) => {
     setError("");
     setSuccess("");
-
     startTransition(async () => {
       try {
         const registerData = await RegisterAction(data);
@@ -67,7 +66,7 @@ const RegisterForm: FC<Props> = ({}) => {
             <div className="space-y-4">
               <FormField
                 control={form.control}
-                name="email"
+                name="username"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Username</FormLabel>

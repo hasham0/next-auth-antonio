@@ -22,7 +22,9 @@ const Header: FC<Props> = ({ label }) => {
         <Lock size={50} />
         <span>Auth</span>
       </h1>
-      <p className="text-sm text-muted-foreground">{label}</p>
+      <p className="text-sm font-bold text-muted-foreground underline underline-offset-2">
+        {label}
+      </p>
     </div>
   );
 };
