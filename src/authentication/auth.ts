@@ -10,6 +10,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
   },
+  events: {
+    async linkAccount({ user }) {
+      await prismaDB.user.update({
+        where: {
+          id: user.id,
+        },
+        data: { emailVerified: new Date() },
+      });
+    },
+  },
+  pages: {
+    signIn: "/login",
+    error: "/error",
+  },
   callbacks: {
     // async signIn({ user }) {
     //   const isUserExist = await getUserByID(user.id as string);
@@ -37,6 +51,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
   },
-  secret: process.env.AUTH_SECRET as string,
+  secret: process.env.AUTH_SECRET,
   ...authConfig,
 });
