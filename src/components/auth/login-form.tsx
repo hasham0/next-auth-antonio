@@ -16,8 +16,9 @@ import { Button } from "@/components/ui/button";
 import { LoginSchema, LoginSchemaTS } from "@/database/schemas";
 import FormError from "@/components/customComp/form-error";
 import FormSuccess from "@/components/customComp/form-success";
-import { loginAction } from "@/actions/login";
 import { useTransition } from "react";
+import { ResponseTS } from "@/types";
+import { loginAction } from "@/actions/login";
 
 type Props = {};
 
@@ -39,11 +40,11 @@ const LoginForm: FC<Props> = ({}) => {
 
     startTransition(async () => {
       try {
-        const loginData = await loginAction(data);
-        if (loginData.error) {
-          throw new Error(loginData.error);
+        const loginData: ResponseTS = await loginAction(data);
+        if (loginData?.error) {
+          throw new Error(loginData?.error);
         }
-        setSuccess(loginData.success as string);
+        setSuccess(loginData?.success as string);
       } catch (error) {
         const err = (error as { message: string }).message;
         setError(err as string);

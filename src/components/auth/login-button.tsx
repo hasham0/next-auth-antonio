@@ -12,7 +12,6 @@ const LoginButton: FC<Props> = ({ children, asChild, mode = "redirect" }) => {
   const router = useRouter();
   const hanldeClick = () => {
     router.push("/login");
-    console.log("handle Click");
   };
 
   if (mode === "model") {

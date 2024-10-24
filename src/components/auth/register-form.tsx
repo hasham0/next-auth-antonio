@@ -19,6 +19,7 @@ import FormSuccess from "@/components/customComp/form-success";
 import { RegisterAction } from "@/actions/register";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { ResponseTS } from "@/types";
 
 type Props = {};
 
@@ -41,11 +42,11 @@ const RegisterForm: FC<Props> = ({}) => {
     setSuccess("");
     startTransition(async () => {
       try {
-        const registerData = await RegisterAction(data);
+        const registerData: ResponseTS = await RegisterAction(data);
         if (registerData.error) {
-          throw new Error(registerData.error);
+          throw new Error(registerData?.error);
         }
-        setSuccess(registerData.success as string);
+        setSuccess(registerData?.success as string);
         setTimeout(() => {
           router.push("/login");
         }, 3000);
