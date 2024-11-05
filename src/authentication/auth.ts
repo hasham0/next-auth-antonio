@@ -1,7 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prismaDB from "@/database/db";
 import authConfig from "./auth.config";
-import { getUserByID } from "@/database/data/user";
+import { getUserByEmail, getUserByID } from "@/database/data/user";
 import NextAuth from "next-auth";
 import { UserRole } from "@prisma/client";
 
@@ -24,20 +24,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
     error: "/error",
   },
-  //  debug: true,
   callbacks: {
-    // async signIn({ user }) {
-    //   console.log("🚀 ~ signIn ~ user => ", { user });
-
-    //   const isUserExist = await getUserByID(user.id as string);
-
-    //   console.log("🚀 ~ signIn ~ isUserExist => ", { isUserExist });
-
-    //   if (!isUserExist || !isUserExist.emailVerified) {
-    //     return false;
-    //   }
-    //   return true;
-    // },
+    async signIn({ user }) {
+      const isUserExist = await getUserByEmail(user.email as string);
+      if (!isUserExist || !isUserExist.emailVerified) return false;
+      return true;
+    },
 
     async session({ token, session }) {
       if (token.sub && session.user) {

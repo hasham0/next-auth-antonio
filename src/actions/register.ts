@@ -21,6 +21,7 @@ const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
   // TODO: check if user existed
   const isUserExisted: UserTS = await getUserByEmail(email);
   if (isUserExisted) {
+    console.log("🚀 ~ RegisterAction ~ isUserExisted:", isUserExisted);
     return { success: null, error: "Email already in use!" };
   }
 

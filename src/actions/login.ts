@@ -27,6 +27,8 @@ const loginAction = async (value: LoginSchemaTS): Promise<ResponseTS> => {
       switch (error.type) {
         case "CredentialsSignin":
           return { success: null, error: "Invalid Crdentials" };
+        case "OAuthAccountNotLinked":
+          return { success: null, error: "Email already in use!" };
         default:
           return { success: null, error: "Something Went Wrong in Login" };
       }

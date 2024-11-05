@@ -7,6 +7,7 @@ import { Poppins } from "next/font/google";
 const fontPoppins = Poppins({
   subsets: ["latin"],
   weight: "600",
+  variable: "--font-geist-pops",
 });
 export default function Home() {
   return (

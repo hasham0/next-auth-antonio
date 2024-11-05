@@ -9,7 +9,11 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        sans: [
+          "var(--font-geist-sans)",
+          "var(--font-geist-pops)",
+          ...fontFamily.sans,
+        ],
         mono: ["var(--font-geist-mono)", ...fontFamily.sans],
       },
       colors: {
