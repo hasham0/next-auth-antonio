@@ -43,7 +43,7 @@ const RegisterForm: FC<Props> = ({}) => {
     startTransition(async () => {
       try {
         const registerData: ResponseTS = await RegisterAction(data);
-        if (registerData.error) {
+        if (registerData?.error) {
           throw new Error(registerData?.error);
         }
         setSuccess(registerData?.success as string);

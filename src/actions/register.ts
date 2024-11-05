@@ -5,6 +5,7 @@ import { getUserByEmail } from "@/database/data/user";
 import { RegisterSchema, RegisterSchemaTS } from "@/database/schemas";
 import { ResponseTS, UserTS } from "@/types";
 import { AuthError } from "next-auth";
+import generateVerificationToken from "@/database/tokens";
 
 const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
   const validateFields = await RegisterSchema.safeParseAsync(value);
@@ -21,7 +22,6 @@ const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
   // TODO: check if user existed
   const isUserExisted: UserTS = await getUserByEmail(email);
   if (isUserExisted) {
-    console.log("🚀 ~ RegisterAction ~ isUserExisted:", isUserExisted);
     return { success: null, error: "Email already in use!" };
   }
 
@@ -36,8 +36,8 @@ const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
     });
 
     // TODO: send verification token email
-
-    return { success: "User Created Successfully!", error: null };
+    const verificationToken = await generateVerificationToken(email);
+    return { success: "Confirmation Email Send!", error: null };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

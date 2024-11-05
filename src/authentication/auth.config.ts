@@ -7,15 +7,6 @@ import type { NextAuthConfig } from "next-auth";
 import { getUserByEmail } from "@/database/data/user";
 import { UserTS } from "@/types";
 
-// console.log("google env", {
-//   id: process.env.AUTH_GOOGLE_ID,
-//   sec: process.env.AUTH_GOOGLE_SECRET,
-// });
-// console.log("github env", {
-//   id: process.env.AUTH_GITHUB_ID,
-//   sec: process.env.AUTH_GITHUB_SECRET,
-// });
-
 export default {
   providers: [
     Credentials({
@@ -31,7 +22,6 @@ export default {
 
           // Fetch user by email
           const user: UserTS = await getUserByEmail(email);
-          console.log("🚀 ~ authorize ~ user => ", { user });
 
           // If no user found or user has no password, return null
           if (!user || !user.password) return null;

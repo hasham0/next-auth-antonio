@@ -1,8 +1,10 @@
 "use server";
 import { signIn } from "@/authentication/auth";
+import { getUserByEmail } from "@/database/data/user";
 import { LoginSchema, LoginSchemaTS } from "@/database/schemas";
+import generateVerificationToken from "@/database/tokens";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes/routes";
-import { ResponseTS } from "@/types";
+import { ResponseTS, UserTS } from "@/types";
 import { AuthError } from "next-auth";
 
 const loginAction = async (value: LoginSchemaTS): Promise<ResponseTS> => {
@@ -14,14 +16,27 @@ const loginAction = async (value: LoginSchemaTS): Promise<ResponseTS> => {
     };
   }
   const { email, password } = validateFields.data;
+
+  // TODO: check if user existed
+  const isUserExisted: UserTS = await getUserByEmail(email);
+  if (!isUserExisted || !isUserExisted.email || !isUserExisted.password) {
+    return { success: null, error: "Email does not Exit" };
+  }
+
+  if (!isUserExisted.emailVerified) {
+    const verificationToken = await generateVerificationToken(
+      isUserExisted.email,
+    );
+    return { success: "Confirmation email sent", error: null };
+  }
+
   try {
-    const ss = await signIn("credentials", {
+    const currentUser = await signIn("credentials", {
       email,
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
-    console.log("🚀 ~ loginAction ~ ss:", ss);
-    return ss;
+    return currentUser;
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

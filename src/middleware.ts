@@ -22,9 +22,11 @@ export default auth((req) => {
   if (isAuthRoute && isLoggedIn) {
     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
+
   if (!isLoggedIn && !isPublicRoute && nextUrl.pathname === "/settings") {
     return Response.redirect(new URL("/login", nextUrl));
   }
+  return;
 });
 
 export const config = {

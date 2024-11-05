@@ -19,10 +19,16 @@ import FormSuccess from "@/components/customComp/form-success";
 import { useTransition } from "react";
 import { ResponseTS } from "@/types";
 import { loginAction } from "@/actions/login";
+import { useSearchParams } from "next/navigation";
 
 type Props = {};
 
 const LoginForm: FC<Props> = ({}) => {
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with different provider!"
+      : "";
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<string | undefined>(undefined);
@@ -103,7 +109,7 @@ const LoginForm: FC<Props> = ({}) => {
                 )}
               />
             </div>
-            <FormError message={error} />
+            <FormError message={error || urlError} />
             <FormSuccess message={success} />
             <Button
               disabled={isPending}

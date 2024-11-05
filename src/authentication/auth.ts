@@ -1,7 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prismaDB from "@/database/db";
 import authConfig from "./auth.config";
-import { getUserByEmail, getUserByID } from "@/database/data/user";
+import { getUserByID } from "@/database/data/user";
 import NextAuth from "next-auth";
 import { UserRole } from "@prisma/client";
 
@@ -11,23 +11,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt",
   },
   events: {
-    // async linkAccount({ user }) {
-    //   await prismaDB.user.update({
-    //     where: {
-    //       id: user.id,
-    //     },
-    //     data: { emailVerified: new Date() },
-    //   });
-    // },
+    async linkAccount({ user }) {
+      await prismaDB.user.update({
+        where: {
+          id: user.id,
+        },
+        data: { emailVerified: new Date() },
+      });
+    },
   },
   pages: {
     signIn: "/login",
     error: "/error",
   },
   callbacks: {
-    async signIn({ user }) {
-      const isUserExist = await getUserByEmail(user.email as string);
-      if (!isUserExist || !isUserExist.emailVerified) return false;
+    async signIn({ user, account }) {
+      // TODO: allow OAuth with out email verification
+      if (account?.provider !== "Credentials") return true;
+      const isUserExist = await getUserByID(user.id as string);
+      if (!isUserExist?.emailVerified) return false;
       return true;
     },
 
@@ -41,7 +43,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token }) {
       if (!token.sub) return token;
       const isUserExist = await getUserByID(token.sub);
       if (!isUserExist) return token;
