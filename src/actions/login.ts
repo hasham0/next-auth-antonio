@@ -15,12 +15,13 @@ const loginAction = async (value: LoginSchemaTS): Promise<ResponseTS> => {
   }
   const { email, password } = validateFields.data;
   try {
-    await signIn("credentials", {
+    const ss = await signIn("credentials", {
       email,
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
-    return { success: "Login Successfull", error: null };
+    console.log("🚀 ~ loginAction ~ ss:", ss);
+    return ss;
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

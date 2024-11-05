@@ -9,10 +9,11 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes/routes";
 type Props = {};
 
 const Social: FC<Props> = ({}) => {
-  const handleSocialLogin = (provider: "google" | "github") => {
-    signIn(provider, {
+  const handleSocialLogin = async (provider: "google" | "github") => {
+    const dd = await signIn(provider, {
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
+    console.log("🚀 ~ handleSocialLogin ~ dd:", dd);
   };
   return (
     <div className="flex w-full items-center gap-x-2">

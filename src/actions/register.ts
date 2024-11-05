@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 import prismaDB from "@/database/db";
 import { getUserByEmail } from "@/database/data/user";
 import { RegisterSchema, RegisterSchemaTS } from "@/database/schemas";
-import { ResponseTS } from "@/types";
+import { ResponseTS, UserTS } from "@/types";
 import { AuthError } from "next-auth";
 
 const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
@@ -19,7 +19,7 @@ const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
   const hashedPassword = await bcryptjs.hash(password, salt);
 
   // TODO: check if user existed
-  const isUserExisted = await getUserByEmail(email);
+  const isUserExisted: UserTS = await getUserByEmail(email);
   if (isUserExisted) {
     return { success: null, error: "Email already in use!" };
   }
@@ -28,7 +28,7 @@ const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
     // TODO: create new user
     await prismaDB.user.create({
       data: {
-        username,
+        name: username,
         email,
         password: hashedPassword,
       },
@@ -42,6 +42,8 @@ const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
       switch (error.type) {
         case "EmailSignInError":
           return { success: null, error: "Invalid Crdentials" };
+        case "OAuthAccountNotLinked":
+          return { success: null, error: "Email already in use!" };
         default:
           return {
             success: null,

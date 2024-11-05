@@ -1,9 +1,10 @@
 import prismaDB from "@/database/db";
+import { UserTS } from "@/types";
 
 // TODO: get user from db by email
-const getUserByEmail = async (email: string) => {
+const getUserByEmail = async (email: string): Promise<UserTS> => {
   try {
-    const user = await prismaDB.user.findUnique({
+    const user: UserTS = await prismaDB.user.findUnique({
       where: {
         email,
       },
@@ -15,9 +16,9 @@ const getUserByEmail = async (email: string) => {
 };
 
 // TODO: get user from db by id
-const getUserByID = async (id: string) => {
+const getUserByID = async (id: string): Promise<UserTS> => {
   try {
-    const user = await prismaDB.user.findUnique({
+    const user: UserTS = await prismaDB.user.findUnique({
       where: {
         id,
       },

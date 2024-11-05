@@ -11,26 +11,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt",
   },
   events: {
-    async linkAccount({ user }) {
-      await prismaDB.user.update({
-        where: {
-          id: user.id,
-        },
-        data: { emailVerified: new Date() },
-      });
-    },
+    // async linkAccount({ user }) {
+    //   await prismaDB.user.update({
+    //     where: {
+    //       id: user.id,
+    //     },
+    //     data: { emailVerified: new Date() },
+    //   });
+    // },
   },
   pages: {
     signIn: "/login",
     error: "/error",
   },
+  //  debug: true,
   callbacks: {
     // async signIn({ user }) {
+    //   console.log("🚀 ~ signIn ~ user => ", { user });
+
     //   const isUserExist = await getUserByID(user.id as string);
+
+    //   console.log("🚀 ~ signIn ~ isUserExist => ", { isUserExist });
+
     //   if (!isUserExist || !isUserExist.emailVerified) {
     //     return false;
     //   }
-
     //   return true;
     // },
 
@@ -43,6 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
+
     async jwt({ token, user }) {
       if (!token.sub) return token;
       const isUserExist = await getUserByID(token.sub);

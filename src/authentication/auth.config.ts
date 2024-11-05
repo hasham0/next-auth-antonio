@@ -5,12 +5,22 @@ import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "@/database/schemas";
 import type { NextAuthConfig } from "next-auth";
 import { getUserByEmail } from "@/database/data/user";
+import { UserTS } from "@/types";
+
+// console.log("google env", {
+//   id: process.env.AUTH_GOOGLE_ID,
+//   sec: process.env.AUTH_GOOGLE_SECRET,
+// });
+// console.log("github env", {
+//   id: process.env.AUTH_GITHUB_ID,
+//   sec: process.env.AUTH_GITHUB_SECRET,
+// });
 
 export default {
   providers: [
     Credentials({
       name: "Credentials",
-      async authorize(credentials) {
+      async authorize(credentials): Promise<UserTS> {
         // Validate the input fields using your schema
         const validateFields = await LoginSchema.safeParseAsync(credentials);
 
@@ -20,12 +30,11 @@ export default {
           const password = validateFields.data.password as string;
 
           // Fetch user by email
-          const user = await getUserByEmail(email);
+          const user: UserTS = await getUserByEmail(email);
+          console.log("🚀 ~ authorize ~ user => ", { user });
 
           // If no user found or user has no password, return null
-          if (!user || !user.password) {
-            return null;
-          }
+          if (!user || !user.password) return null;
 
           // Compare the provided password with the stored hash
           const isPasswordMatch = await bcryptjs.compare(
@@ -38,23 +47,22 @@ export default {
             return {
               id: user.id,
               email: user.email,
-              username: user.username,
+              name: user.name,
               image: user.image ?? null,
-            };
+            } as UserTS;
           }
         }
-
         // Return null if validation or authentication fails
         return null;
       },
     }),
     GitHub({
-      clientId: process.env.AUTH_GITHUB_ID,
-      clientSecret: process.env.AUTH_GITHUB_SECRET,
+      clientId: process.env.AUTH_GITHUB_ID as string,
+      clientSecret: process.env.AUTH_GITHUB_SECRET as string,
     }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      clientId: process.env.AUTH_GOOGLE_ID as string,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
     }),
   ],
 } satisfies NextAuthConfig;
