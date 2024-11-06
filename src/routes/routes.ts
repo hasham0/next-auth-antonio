@@ -1,5 +1,5 @@
 // TODO: public routes
-export const publicRoutes: Array<string> = ["/"];
+export const publicRoutes: Array<string> = ["/", "/new-verification"];
 
 // TODO: auth routes
 export const authRoutes: Array<string> = ["/login", "/register", "/error"];

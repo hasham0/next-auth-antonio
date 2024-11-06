@@ -44,7 +44,6 @@ const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
       verificationToken?.email as string,
       verificationToken?.token as string,
     );
-
     return { success: "Confirmation Email Send!", error: null };
   } catch (error) {
     if (error instanceof AuthError) {
