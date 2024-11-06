@@ -8,6 +8,7 @@ const envSchema = z.object({
   AUTH_GOOGLE_SECRET: z.string(),
   AUTH_GITHUB_ID: z.string(),
   AUTH_GITHUB_SECRET: z.string(),
+  RESEND_API_KEY: z.string(),
 });
 
 envSchema.parse(process.env);

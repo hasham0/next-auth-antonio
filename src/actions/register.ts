@@ -6,6 +6,7 @@ import { RegisterSchema, RegisterSchemaTS } from "@/database/schemas";
 import { ResponseTS, UserTS } from "@/types";
 import { AuthError } from "next-auth";
 import generateVerificationToken from "@/database/tokens";
+import sendVerificationEmail from "@/lib/mail";
 
 const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
   const validateFields = await RegisterSchema.safeParseAsync(value);
@@ -14,6 +15,8 @@ const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
     return { success: null, error: "Invalid Fields" };
   }
   const { username, email, password } = validateFields.data;
+
+  // TODO: generate salt round and hashed password
   const salt = await bcryptjs.genSalt(
     parseInt(process.env.SALT_ROUND as string),
   );
@@ -37,6 +40,11 @@ const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
 
     // TODO: send verification token email
     const verificationToken = await generateVerificationToken(email);
+    await sendVerificationEmail(
+      verificationToken?.email as string,
+      verificationToken?.token as string,
+    );
+
     return { success: "Confirmation Email Send!", error: null };
   } catch (error) {
     if (error instanceof AuthError) {

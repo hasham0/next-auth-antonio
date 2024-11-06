@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from "uuid";
 import { getVerificationTokenByEmail } from "@/database/data/verification-token";
-import prismaDB from "./db";
+import prismaDB from "@/database/db";
 import { VerificationTokenTS } from "@/types";
 
 const generateVerificationToken = async (

@@ -3,6 +3,7 @@ import { signIn } from "@/authentication/auth";
 import { getUserByEmail } from "@/database/data/user";
 import { LoginSchema, LoginSchemaTS } from "@/database/schemas";
 import generateVerificationToken from "@/database/tokens";
+import sendVerificationEmail from "@/lib/mail";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes/routes";
 import { ResponseTS, UserTS } from "@/types";
 import { AuthError } from "next-auth";
@@ -26,6 +27,10 @@ const loginAction = async (value: LoginSchemaTS): Promise<ResponseTS> => {
   if (!isUserExisted.emailVerified) {
     const verificationToken = await generateVerificationToken(
       isUserExisted.email,
+    );
+    await sendVerificationEmail(
+      verificationToken?.email as string,
+      verificationToken?.token as string,
     );
     return { success: "Confirmation email sent", error: null };
   }
