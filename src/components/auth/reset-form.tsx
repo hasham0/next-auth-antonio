@@ -13,81 +13,58 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RegisterSchema, RegisterSchemaTS } from "@/database/schemas";
+import { ResetSchema, ResetSchemaTS } from "@/database/schemas";
 import FormError from "@/components/customComp/form-error";
 import FormSuccess from "@/components/customComp/form-success";
-import { RegisterAction } from "@/actions/register";
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { ResponseTS } from "@/types";
+import { resetPasswordAction } from "@/actions/reset";
 
 type Props = {};
 
-const RegisterForm: FC<Props> = ({}) => {
-  const router = useRouter();
+const ResetForm: FC<Props> = ({}) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<string | undefined>(undefined);
-  const form = useForm<RegisterSchemaTS>({
-    resolver: zodResolver(RegisterSchema),
+  const form = useForm<ResetSchemaTS>({
+    resolver: zodResolver(ResetSchema),
     defaultValues: {
-      username: "",
       email: "",
-      password: "",
     },
   });
 
-  const handleRegisterSubmit: SubmitHandler<RegisterSchemaTS> = (values) => {
+  const handleResetSubmit: SubmitHandler<ResetSchemaTS> = (values) => {
     setError("");
     setSuccess("");
+
     startTransition(async () => {
       try {
-        const registerData: ResponseTS = await RegisterAction(values);
-        if (registerData?.error) {
-          throw new Error(registerData?.error);
+        const resetData: ResponseTS = await resetPasswordAction(values);
+        if (resetData?.error) {
+          throw new Error(resetData?.error);
         }
-        setSuccess(registerData?.success as string);
-        setTimeout(() => {
-          router.push("/login");
-        }, 3000);
+        setSuccess(resetData?.success as string);
       } catch (error) {
         const err = (error as { message: string }).message;
         setError(err as string);
       }
     });
   };
+
   return (
     <CardWrapper
-      headerLabel="Create an Account"
-      backButtonLabel="Already have an account?"
+      headerLabel="Forget your Password"
+      backButtonLabel="Back to login"
       backButtonHref="/login"
-      showSocial={true}
+      showSocial={false}
     >
       <div className="">
         <Form {...form}>
           <form
             className="space-y-6"
-            onSubmit={form.handleSubmit(handleRegisterSubmit)}
+            onSubmit={form.handleSubmit(handleResetSubmit)}
           >
             <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="ali"
-                        type={"text"}
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="email"
@@ -105,25 +82,7 @@ const RegisterForm: FC<Props> = ({}) => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="********"
-                        type={"password"}
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              />{" "}
             </div>
             <FormError message={error} />
             <FormSuccess message={success} />
@@ -134,7 +93,7 @@ const RegisterForm: FC<Props> = ({}) => {
               className="w-full"
               variant={"blue"}
             >
-              Register
+              Send reset email
             </Button>
           </form>
         </Form>
@@ -143,4 +102,4 @@ const RegisterForm: FC<Props> = ({}) => {
   );
 };
 
-export default RegisterForm;
+export default ResetForm;

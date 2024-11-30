@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import CardWrapper from "@/components/auth/card-wrapper";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,99 +13,74 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RegisterSchema, RegisterSchemaTS } from "@/database/schemas";
+import { NewPasswordSchema, NewPasswordSchemaTS } from "@/database/schemas";
 import FormError from "@/components/customComp/form-error";
 import FormSuccess from "@/components/customComp/form-success";
-import { RegisterAction } from "@/actions/register";
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { newPassword } from "@/actions/new-password";
 import { ResponseTS } from "@/types";
 
 type Props = {};
 
-const RegisterForm: FC<Props> = ({}) => {
-  const router = useRouter();
+const NewPasswordForm: FC<Props> = ({}) => {
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [token, setToken] = useState<string | undefined | null>(
+    searchParams.get("token"),
+  );
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<string | undefined>(undefined);
-  const form = useForm<RegisterSchemaTS>({
-    resolver: zodResolver(RegisterSchema),
+  const form = useForm<NewPasswordSchemaTS>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      username: "",
-      email: "",
       password: "",
     },
   });
 
-  const handleRegisterSubmit: SubmitHandler<RegisterSchemaTS> = (values) => {
+  useEffect(() => {
+    if (!token) return;
+    setToken(token);
+  }, [token]);
+
+  const handleNewPasswordSubmit: SubmitHandler<NewPasswordSchemaTS> = (
+    values,
+    token,
+  ) => {
     setError("");
     setSuccess("");
+    console.log("🚀 ~ values:", { values, token });
     startTransition(async () => {
       try {
-        const registerData: ResponseTS = await RegisterAction(values);
-        if (registerData?.error) {
-          throw new Error(registerData?.error);
+        const newPasswordData: ResponseTS = await newPassword(
+          values?.password,
+          token as unknown as string,
+        );
+        if (newPasswordData?.error) {
+          throw new Error(newPasswordData?.error);
         }
-        setSuccess(registerData?.success as string);
-        setTimeout(() => {
-          router.push("/login");
-        }, 3000);
+        setSuccess(newPasswordData?.success as string);
       } catch (error) {
         const err = (error as { message: string }).message;
         setError(err as string);
       }
     });
   };
+
   return (
     <CardWrapper
-      headerLabel="Create an Account"
-      backButtonLabel="Already have an account?"
+      headerLabel="Enter a new Password"
+      backButtonLabel="Back to login"
       backButtonHref="/login"
-      showSocial={true}
+      showSocial={false}
     >
       <div className="">
         <Form {...form}>
           <form
             className="space-y-6"
-            onSubmit={form.handleSubmit(handleRegisterSubmit)}
+            onSubmit={form.handleSubmit(handleNewPasswordSubmit)}
           >
             <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="ali"
-                        type={"text"}
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="ali@gmail.com"
-                        type={"email"}
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="password"
@@ -123,7 +98,7 @@ const RegisterForm: FC<Props> = ({}) => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              />{" "}
             </div>
             <FormError message={error} />
             <FormSuccess message={success} />
@@ -134,7 +109,7 @@ const RegisterForm: FC<Props> = ({}) => {
               className="w-full"
               variant={"blue"}
             >
-              Register
+              Reset Password
             </Button>
           </form>
         </Form>
@@ -143,4 +118,4 @@ const RegisterForm: FC<Props> = ({}) => {
   );
 };
 
-export default RegisterForm;
+export default NewPasswordForm;

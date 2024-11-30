@@ -4,7 +4,7 @@ import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "@/database/schemas";
 import type { NextAuthConfig } from "next-auth";
-import { getUserByEmail } from "@/database/data/user";
+import { getUserByEmail } from "@/database/db_queries/user";
 import { UserTS } from "@/types";
 
 export default {

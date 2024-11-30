@@ -10,10 +10,10 @@ type Props = {};
 
 const Social: FC<Props> = ({}) => {
   const handleSocialLogin = async (provider: "google" | "github") => {
-    const dd = await signIn(provider, {
+    return await signIn(provider, {
+      redirect: true,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
-    console.log("🚀 ~ handleSocialLogin ~ dd:", dd);
   };
   return (
     <div className="flex w-full items-center gap-x-2">

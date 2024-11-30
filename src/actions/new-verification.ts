@@ -1,12 +1,12 @@
 "use server";
 
 import prismaDB from "@/database/db";
-import { getUserByEmail } from "@/database/data/user";
-import { getVerificationTokenByToken } from "@/database/data/verification-token";
+import { getUserByEmail } from "@/database/db_queries/user";
+import { getVerificationTokenByToken } from "@/database/db_queries/verification-token";
 import { ResponseTS } from "@/types";
 import { AuthError } from "next-auth";
 
-const newVerification = async (token: string): Promise<ResponseTS> => {
+const newVerificationAction = async (token: string): Promise<ResponseTS> => {
   try {
     const isExistingToken = await getVerificationTokenByToken(token);
     if (!isExistingToken) {
@@ -47,4 +47,4 @@ const newVerification = async (token: string): Promise<ResponseTS> => {
   }
 };
 
-export { newVerification };
+export { newVerificationAction };

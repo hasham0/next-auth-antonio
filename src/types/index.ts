@@ -1,4 +1,4 @@
-import { User, VerificationToken } from "@prisma/client";
+import { ResetPasswordToken, User, VerificationToken } from "@prisma/client";
 
 enum KEYS {
   success = "success",
@@ -13,4 +13,7 @@ type ResponseTS<T extends string = keyof typeof KEYS> =
 
 type UserTS = User | null;
 type VerificationTokenTS = VerificationToken | null;
-export type { ResponseTS, UserTS, VerificationTokenTS };
+type ResetPasswordTokenTS = ResetPasswordToken | null;
+
+// !Export Types
+export type { ResponseTS, UserTS, VerificationTokenTS, ResetPasswordTokenTS };

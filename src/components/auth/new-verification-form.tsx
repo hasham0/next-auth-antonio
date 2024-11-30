@@ -3,23 +3,24 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import CardWrapper from "@/components/auth/card-wrapper";
 import { BeatLoader } from "react-spinners";
 import { useSearchParams } from "next/navigation";
-import { newVerification } from "@/actions/new-verification";
+import { newVerificationAction } from "@/actions/new-verification";
 import FormError from "@/components/customComp/form-error";
 import FormSuccess from "@/components/customComp/form-success";
 type Props = {};
 
 const NewVerificationForm: FC<Props> = ({}) => {
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token: string | null = searchParams.get("token");
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<string | undefined>(undefined);
 
   const onSubmit = useCallback(async () => {
+    if (success || error) return;
     if (!token) {
       return setError("Missing token");
     }
     try {
-      const verificationData = await newVerification(token);
+      const verificationData = await newVerificationAction(token);
       if (verificationData?.error) {
         throw new Error(verificationData?.error);
       }
@@ -31,7 +32,6 @@ const NewVerificationForm: FC<Props> = ({}) => {
   }, [token, success, error]);
 
   useEffect(() => {
-    if (success || error) return;
     onSubmit();
   }, [onSubmit]);
 

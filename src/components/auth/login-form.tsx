@@ -20,6 +20,7 @@ import { useTransition } from "react";
 import { ResponseTS } from "@/types";
 import { loginAction } from "@/actions/login";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type Props = {};
 
@@ -40,13 +41,13 @@ const LoginForm: FC<Props> = ({}) => {
     },
   });
 
-  const handleLoginSubmit: SubmitHandler<LoginSchemaTS> = (data) => {
+  const handleLoginSubmit: SubmitHandler<LoginSchemaTS> = (values) => {
     setError("");
     setSuccess("");
 
     startTransition(async () => {
       try {
-        const loginData: ResponseTS = await loginAction(data);
+        const loginData: ResponseTS = await loginAction(values);
         if (loginData?.error) {
           throw new Error(loginData?.error);
         }
@@ -104,6 +105,14 @@ const LoginForm: FC<Props> = ({}) => {
                         disabled={isPending}
                       />
                     </FormControl>
+                    <Button
+                      size={"sm"}
+                      asChild
+                      variant={"link"}
+                      className="w-full px-0 text-center font-normal hover:underline-offset-1"
+                    >
+                      <Link href={"/reset"}>Forgot Password</Link>
+                    </Button>
                     <FormMessage />
                   </FormItem>
                 )}

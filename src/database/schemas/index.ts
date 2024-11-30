@@ -33,6 +33,19 @@ const RegisterSchema = z.object({
 });
 type RegisterSchemaTS = z.infer<typeof RegisterSchema>;
 
+// TODO:reset schema
+const ResetSchema = RegisterSchema.pick({ email: true });
+type ResetSchemaTS = z.infer<typeof ResetSchema>;
+
+// TODO:new password schema
+const NewPasswordSchema = RegisterSchema.pick({ password: true });
+type NewPasswordSchemaTS = z.infer<typeof NewPasswordSchema>;
+
 //! Export:
-export { LoginSchema, RegisterSchema };
-export type { LoginSchemaTS, RegisterSchemaTS };
+export { LoginSchema, RegisterSchema, ResetSchema, NewPasswordSchema };
+export type {
+  LoginSchemaTS,
+  RegisterSchemaTS,
+  ResetSchemaTS,
+  NewPasswordSchemaTS,
+};

@@ -1,12 +1,12 @@
 "use server";
 import bcryptjs from "bcryptjs";
 import prismaDB from "@/database/db";
-import { getUserByEmail } from "@/database/data/user";
+import { getUserByEmail } from "@/database/db_queries/user";
 import { RegisterSchema, RegisterSchemaTS } from "@/database/schemas";
 import { ResponseTS, UserTS } from "@/types";
 import { AuthError } from "next-auth";
-import generateVerificationToken from "@/database/tokens";
-import sendVerificationEmail from "@/lib/mail";
+import { generateVerificationToken } from "@/services/tokens";
+import { sendVerificationEmail } from "@/services/mail";
 
 const RegisterAction = async (value: RegisterSchemaTS): Promise<ResponseTS> => {
   const validateFields = await RegisterSchema.safeParseAsync(value);

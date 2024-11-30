@@ -14,7 +14,7 @@ const config: Config = {
           "var(--font-geist-pops)",
           ...fontFamily.sans,
         ],
-        mono: ["var(--font-geist-mono)", ...fontFamily.sans],
+        mono: ["var(--font-geist-mono)", ...fontFamily.mono],
       },
       colors: {
         background: "hsl(var(--background))",

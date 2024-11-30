@@ -8,9 +8,9 @@ export const getVerificationTokenByToken = async (
     const verificationToken = await prismaDB.verificationToken.findUnique({
       where: { token: token },
     });
-    console.log("🚀 ~ verificationToken:", verificationToken);
     return verificationToken;
   } catch (error) {
+    console.error("🚀 ~ error:", error);
     return null;
   }
 };
@@ -26,6 +26,7 @@ export const getVerificationTokenByEmail = async (
     });
     return verificationToken;
   } catch (error) {
+    console.error("🚀 ~ error:", error);
     return null;
   }
 };

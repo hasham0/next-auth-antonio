@@ -11,6 +11,7 @@ const getUserByEmail = async (email: string): Promise<UserTS> => {
     });
     return user;
   } catch (error) {
+    console.error("🚀 ~ getUserByEmail ~ error:", error);
     return null;
   }
 };
@@ -25,6 +26,7 @@ const getUserByID = async (id: string): Promise<UserTS> => {
     });
     return user;
   } catch (error) {
+    console.error("🚀 ~ getUserByID ~ error:", error);
     return null;
   }
 };
