@@ -1,4 +1,5 @@
 "use server";
+
 import bcryptjs from "bcryptjs";
 import prismaDB from "@/database/db";
 import { getUserByEmail } from "@/database/db_queries/user";

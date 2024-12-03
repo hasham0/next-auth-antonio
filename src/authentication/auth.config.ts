@@ -12,38 +12,42 @@ export default {
     Credentials({
       name: "Credentials",
       async authorize(credentials): Promise<UserTS> {
-        // Validate the input fields using your schema
-        const validateFields = await LoginSchema.safeParseAsync(credentials);
+        try {
+          // Validate the input fields using your schema
+          const validateFields = await LoginSchema.safeParseAsync(credentials);
 
-        // Check if validation succeeded
-        if (validateFields.success) {
-          const email = validateFields.data.email as string;
-          const password = validateFields.data.password as string;
+          // Check if validation succeeded
+          if (validateFields.success) {
+            const email = validateFields.data.email as string;
+            const password = validateFields.data.password as string;
 
-          // Fetch user by email
-          const user: UserTS = await getUserByEmail(email);
+            // Fetch user by email
+            const user: UserTS = await getUserByEmail(email);
 
-          // If no user found or user has no password, return null
-          if (!user || !user.password) return null;
+            // If no user found or user has no password, return null
+            if (!user || !user.password) return null;
 
-          // Compare the provided password with the stored hash
-          const isPasswordMatch = await bcryptjs.compare(
-            password,
-            user.password,
-          );
+            // Compare the provided password with the stored hash
+            const isPasswordMatch = await bcryptjs.compare(
+              password,
+              user.password,
+            );
 
-          // If passwords match, return the user object
-          if (isPasswordMatch) {
-            return {
-              id: user.id,
-              email: user.email,
-              name: user.name,
-              image: user.image ?? null,
-            } as UserTS;
+            // If passwords match, return the user object
+            if (isPasswordMatch) {
+              return {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                image: user.image ?? null,
+              } as UserTS;
+            }
           }
+          // Return null if validation or authentication fails
+          return null;
+        } catch (error) {
+          throw error;
         }
-        // Return null if validation or authentication fails
-        return null;
       },
     }),
     GitHub({

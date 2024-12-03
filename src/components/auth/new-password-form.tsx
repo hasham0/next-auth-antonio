@@ -74,7 +74,7 @@ const NewPasswordForm: FC<Props> = ({}) => {
       backButtonHref="/login"
       showSocial={false}
     >
-      <div className="">
+      <div>
         <Form {...form}>
           <form
             className="space-y-6"

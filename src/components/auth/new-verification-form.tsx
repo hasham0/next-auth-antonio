@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { newVerificationAction } from "@/actions/new-verification";
 import FormError from "@/components/customComp/form-error";
 import FormSuccess from "@/components/customComp/form-success";
+
 type Props = {};
 
 const NewVerificationForm: FC<Props> = ({}) => {

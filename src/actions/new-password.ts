@@ -1,9 +1,11 @@
 "use server";
+
 import prismaDB from "@/database/db";
 import { NewPasswordSchema } from "@/database/schemas";
 import { ResponseTS } from "@/types";
 import { AuthError } from "next-auth";
-const newPassword = async (
+
+const newPasswordAction = async (
   value: string,
   token: string,
 ): Promise<ResponseTS> => {
@@ -36,4 +38,4 @@ const newPassword = async (
   }
 };
 
-export { newPassword };
+export { newPasswordAction };

@@ -66,7 +66,7 @@ const LoginForm: FC<Props> = ({}) => {
       backButtonHref="/register"
       showSocial={true}
     >
-      <div className="">
+      <div>
         <Form {...form}>
           <form
             className="space-y-6"

@@ -32,7 +32,7 @@ const CardWrapper: FC<Props> = ({
       </CardHeader>
       <CardContent>{children}</CardContent>
       {showSocial && (
-        <CardFooter className="">
+        <CardFooter>
           <Social />
         </CardFooter>
       )}

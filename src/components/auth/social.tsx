@@ -20,7 +20,7 @@ const Social: FC<Props> = ({}) => {
       <Button
         size={"lg"}
         variant={"outline"}
-        className="w-full"
+        className="w-full duration-200 ease-in hover:bg-black/90 hover:text-white"
         onClick={() => handleSocialLogin("google")}
       >
         <FcGoogle className="h-5 w-5" />
@@ -28,7 +28,7 @@ const Social: FC<Props> = ({}) => {
       <Button
         size={"lg"}
         variant={"outline"}
-        className="w-full"
+        className="w-full duration-200 ease-in hover:bg-black/90 hover:text-white"
         onClick={() => handleSocialLogin("github")}
       >
         <FaGithub className="h-5 w-5" />
