@@ -32,14 +32,16 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  password      String?
-  emailVerified DateTime? @map("email_verified")
-  image         String?
-  role          UserRole? @default(USER)
-  accounts      Account[]
+  id                    String                 @id @default(cuid())
+  name                  String?
+  email                 String?                @unique
+  password              String?
+  emailVerified         DateTime?              @map("email_verified")
+  image                 String?
+  role                  UserRole?              @default(USER)
+  accounts              Account[]
+  isTwoFactorEnabled    Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
 
   @@map("users")
 }
@@ -48,7 +50,7 @@ model VerificationToken {
   id      String   @id @default(cuid())
   email   String
   token   String   @unique
-  expires DateTime
+  expired DateTime
 
   @@unique([email, token])
   @@map("verification_token")
@@ -58,8 +60,27 @@ model ResetPasswordToken {
   id      String   @id @default(cuid())
   email   String   @unique
   token   String   @unique
-  expires DateTime
+  expired DateTime
 
   @@unique([email, token])
   @@map("reset_password_token")
+}
+
+model TwoFactorToken {
+  id      String   @id @default(cuid())
+  email   String   @unique
+  token   String   @unique
+  expired DateTime
+
+  @@unique([email, token])
+  @@map("two_factor_token")
+}
+
+model TwoFactorConfirmation {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+  @@map("two_factor_confirmation")
 }

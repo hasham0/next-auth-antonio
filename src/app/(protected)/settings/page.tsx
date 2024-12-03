@@ -13,7 +13,7 @@ export default async function SettingsPage({}: Props) {
   const session = await auth();
   console.log("🚀 ~ SettingsPage ~ session => ", session?.user.role);
   return (
-    <div>
+    <div className="flex flex-col items-center p-3">
       <h1>Settings Page</h1>
       <p>{JSON.stringify(session)}</p>
       <form

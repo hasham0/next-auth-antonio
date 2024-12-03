@@ -12,7 +12,7 @@ const newVerificationAction = async (token: string): Promise<ResponseTS> => {
     if (!isExistingToken) {
       return { success: null, error: "Token does not exist" };
     }
-    const isTokenHasExpired = new Date(isExistingToken.expires) < new Date();
+    const isTokenHasExpired = new Date(isExistingToken.expired) < new Date();
     if (isTokenHasExpired) {
       return { success: null, error: "Token has expired!" };
     }
@@ -27,9 +27,9 @@ const newVerificationAction = async (token: string): Promise<ResponseTS> => {
         email: isExistingToken.email,
       },
     });
-    // await prismaDB.verificationToken.delete({
-    //   where: { id: isExistingToken.id },
-    // });
+    await prismaDB.verificationToken.delete({
+      where: { id: isExistingToken.id },
+    });
     return { success: "Email Verified", error: null };
   } catch (error) {
     if (error instanceof AuthError) {

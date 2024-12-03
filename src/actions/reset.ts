@@ -29,7 +29,6 @@ const resetPasswordAction = async (
       passwordResetToken?.email as string,
       passwordResetToken?.token as string,
     );
-
     return { success: "Reset email sent!", error: null };
   } catch (error) {
     if (error instanceof AuthError) {

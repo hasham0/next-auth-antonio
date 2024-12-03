@@ -17,18 +17,17 @@ import { NewPasswordSchema, NewPasswordSchemaTS } from "@/database/schemas";
 import FormError from "@/components/customComp/form-error";
 import FormSuccess from "@/components/customComp/form-success";
 import { useTransition } from "react";
-import { useSearchParams } from "next/navigation";
-import { newPassword } from "@/actions/new-password";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ResponseTS } from "@/types";
+import { newPasswordAction } from "@/actions/new-password";
 
 type Props = {};
 
 const NewPasswordForm: FC<Props> = ({}) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const token: string | null = searchParams.get("token");
   const [isPending, startTransition] = useTransition();
-  const [token, setToken] = useState<string | undefined | null>(
-    searchParams.get("token"),
-  );
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<string | undefined>(undefined);
   const form = useForm<NewPasswordSchemaTS>({
@@ -38,28 +37,24 @@ const NewPasswordForm: FC<Props> = ({}) => {
     },
   });
 
-  useEffect(() => {
-    if (!token) return;
-    setToken(token);
-  }, [token]);
-
   const handleNewPasswordSubmit: SubmitHandler<NewPasswordSchemaTS> = (
     values,
-    token,
   ) => {
     setError("");
     setSuccess("");
-    console.log("🚀 ~ values:", { values, token });
     startTransition(async () => {
       try {
-        const newPasswordData: ResponseTS = await newPassword(
-          values?.password,
-          token as unknown as string,
-        );
+        const newPasswordData: ResponseTS = await newPasswordAction({
+          value: values,
+          token,
+        });
         if (newPasswordData?.error) {
           throw new Error(newPasswordData?.error);
         }
         setSuccess(newPasswordData?.success as string);
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
       } catch (error) {
         const err = (error as { message: string }).message;
         setError(err as string);
