@@ -1,32 +1,21 @@
-import { auth, signOut } from "@/authentication/auth";
+"use client";
+import { logoutAction } from "@/actions/logout";
 import { Button } from "@/components/ui/button";
-import { Metadata } from "next";
-import React from "react";
-
-export const metadata: Metadata = {
-  title: "Dashboard",
-};
+import useCurrentUser from "@/hooks/use-current-user";
 
 type Props = {};
 
-export default async function SettingsPage({}: Props) {
-  const session = await auth();
-  console.log("🚀 ~ SettingsPage ~ session => ", session?.user.role);
+export default function SettingsPage({}: Props) {
+  const session = useCurrentUser();
+  const handleClick = () => {
+    logoutAction();
+  };
+
   return (
-    <div className="flex flex-col items-center p-3">
-      <h1>Settings Page</h1>
-      <p>{JSON.stringify(session)}</p>
-      <form
-        action={async () => {
-          "use server";
-          await signOut({
-            redirect: true,
-            redirectTo: "/login",
-          });
-        }}
-      >
-        <Button type="submit">Sign Out</Button>
-      </form>
+    <div className="rounded-xl bg-white p-10">
+      <Button type="button" variant={"secondary"} onClick={handleClick}>
+        sign out
+      </Button>
     </div>
   );
 }

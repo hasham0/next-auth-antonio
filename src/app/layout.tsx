@@ -2,6 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { auth } from "@/authentication/auth";
+
+import SessionProviderWrapper from "@/providers/session-provider";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -19,19 +22,23 @@ export const metadata: Metadata = {
   description: "Authentication Application",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-        <Toaster />
-      </body>
+    <html lang="en" suppressHydrationWarning>
+      <SessionProviderWrapper session={session}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+          <Toaster />
+        </body>
+      </SessionProviderWrapper>
     </html>
   );
 }
