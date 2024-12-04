@@ -1,12 +1,11 @@
 "use client";
+
 import { logoutAction } from "@/actions/logout";
 import { Button } from "@/components/ui/button";
-import useCurrentUser from "@/hooks/use-current-user";
 
 type Props = {};
 
 export default function SettingsPage({}: Props) {
-  const session = useCurrentUser();
   const handleClick = () => {
     logoutAction();
   };
