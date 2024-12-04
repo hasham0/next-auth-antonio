@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import React, { FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ExtendedUser } from "@/types/next-auth";
-import React, { FC } from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 type Props = {
   user?: ExtendedUser;

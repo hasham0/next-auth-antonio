@@ -1,5 +1,5 @@
-import currentUser from "@/lib/current-user";
 import React from "react";
+import currentUser from "@/lib/current-user";
 import UserInfo from "../_components/user-info";
 
 type Props = {};

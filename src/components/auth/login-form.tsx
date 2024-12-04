@@ -3,6 +3,7 @@ import React, { FC, useState } from "react";
 import CardWrapper from "@/components/auth/card-wrapper";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -12,7 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { LoginSchema, LoginSchemaTS } from "@/database/schemas";
 import FormError from "@/components/customComp/form-error";
@@ -26,8 +26,6 @@ import Link from "next/link";
 type Props = {};
 
 const LoginForm: FC<Props> = ({}) => {
-  const { toast } = useToast();
-
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
@@ -56,8 +54,7 @@ const LoginForm: FC<Props> = ({}) => {
           throw new Error("Unexpected null response from login");
         }
         if ("twoFactor" in loginData) {
-          toast({
-            title: "Two Factor Authentication",
+          toast.success("Two Factor Authentication", {
             description: loginData.message,
           });
           setShowTwoFactor((pre) => !pre);

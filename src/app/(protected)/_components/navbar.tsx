@@ -1,9 +1,11 @@
 "use client";
-import React, { FC } from "react";
-import { Button } from "@/components/ui/button";
+
 import Link from "next/link";
+import React, { FC } from "react";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import UserButton from "@/components/auth/user-button";
+
 type Props = {};
 
 const Navbar: FC<Props> = ({}) => {
