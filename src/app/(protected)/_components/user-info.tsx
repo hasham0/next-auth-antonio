@@ -2,17 +2,22 @@ import React, { FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import { ExtendedUser } from "@/types/next-auth";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { LucideIcon } from "lucide-react";
 
 type Props = {
+  Icon: LucideIcon;
   user?: ExtendedUser;
   label: string;
 };
 
-const UserInfo: FC<Props> = ({ label, user }) => {
+const UserInfo: FC<Props> = ({ label, user, Icon }) => {
   return (
     <Card className="w-[600px] shadow-md">
       <CardHeader>
-        <p className="text-center text-2xl font-semibold">{label}</p>
+        <div className="flex items-center justify-center gap-x-3 text-2xl font-semibold">
+          <Icon />
+          <p>{label}</p>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-row items-center justify-between rounded-md border p-3 shadow-sm">

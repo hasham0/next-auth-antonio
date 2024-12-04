@@ -2,7 +2,10 @@
 
 import { signOut } from "@/authentication/auth";
 const logoutAction = async () => {
-  await signOut();
+  await signOut({
+    redirect: true,
+    redirectTo: "/login",
+  });
 };
 
 export { logoutAction };

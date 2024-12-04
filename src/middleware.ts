@@ -12,26 +12,33 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrifix);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const pathname = nextUrl.pathname;
 
-  if (isApiAuthRoute) {
-    return;
-  }
+  const isApiAuthRoute = pathname.startsWith(apiAuthPrifix);
+  if (isApiAuthRoute) return;
+
+  const isPublicRoute = publicRoutes.includes(pathname);
+  const isAuthRoute = authRoutes.includes(pathname);
+
   if (isAuthRoute && isLoggedIn) {
     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
 
-  if (!isLoggedIn && !isPublicRoute && nextUrl.pathname === "/settings") {
-    return Response.redirect(new URL("/login", nextUrl));
+  if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
+    let callbackUrl = pathname;
+    if (pathname.search) {
+      callbackUrl += pathname.search;
+    }
+    const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+    return Response.redirect(new URL(`/login?${encodedCallbackUrl}`, nextUrl));
   }
+
   return;
 });
 
 export const config = {
   matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/((?!_next|api/auth/session|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     "/(api|trpc)(.*)",
   ],
 };

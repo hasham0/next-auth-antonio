@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import RoleGate from "@/app/(protected)/_components/role-gate";
 import FormSuccess from "@/components/customComp/form-success";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ShieldCheck } from "lucide-react";
 
 type Props = {};
 
@@ -35,7 +36,10 @@ export default function AdminPage({}: Props) {
   return (
     <Card className="w-[600px]">
       <CardHeader>
-        <div className="text-center text-2xl font-semibold">Admin</div>
+        <div className="flex items-center justify-center gap-x-3 text-2xl font-semibold">
+          <ShieldCheck />
+          <p>Admin</p>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <RoleGate allowRole={UserRole.ADMIN}>
